@@ -277,7 +277,7 @@ public class RootWindowContainer extends WindowContainer<DisplayContent>
     final SparseArray<SleepToken> mSleepTokens = new SparseArray<>();
 
     // Whether tasks have moved and we need to rank the tasks before next OOM scoring
-    private boolean mTaskLayersChanged = true;
+    boolean mTaskLayersChanged = true;
     private int mTmpTaskLayerRank;
     private final RankTaskLayersRunnable mRankTaskLayersRunnable = new RankTaskLayersRunnable();
     private Region mTmpOccludingRegion;
@@ -3088,7 +3088,9 @@ public class RootWindowContainer extends WindowContainer<DisplayContent>
     void invalidateTaskLayers() {
         if (!mTaskLayersChanged) {
             mTaskLayersChanged = true;
-            mService.mH.post(mRankTaskLayersRunnable);
+            if (!mWindowManager.mWindowPlacerLocked.isLayoutDeferred()) {
+                mService.mH.post(mRankTaskLayersRunnable);
+            }
         }
     }
 
