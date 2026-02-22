@@ -25,6 +25,7 @@ import static android.os.PowerManager.WAKE_REASON_WAKE_MOTION;
 import static android.view.KeyEvent.KEYCODE_POWER;
 
 import static com.android.server.policy.Flags.supportInputWakeupDelegate;
+import static com.android.server.policy.WindowManagerPolicy.WindowManagerFuncs.LID_BEHAVIOR_NONE;
 
 import android.annotation.Nullable;
 import android.content.Context;
@@ -181,8 +182,13 @@ class WindowWakeUpPolicy {
             if (DEBUG) Slog.d(TAG, "Unable to wake up from lid.");
             return false;
         }
-        wakeUp(mClock.uptimeMillis(), WAKE_REASON_LID, "LID");
-        return true;
+        final int lidBehavior = Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.LID_BEHAVIOR, LID_BEHAVIOR_NONE);
+        if (lidBehavior != LID_BEHAVIOR_NONE) {
+            wakeUp(mClock.uptimeMillis(), WAKE_REASON_LID, "LID");
+            return true;
+        }
+        return false;
     }
 
     /**
