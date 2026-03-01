@@ -334,19 +334,7 @@ public class EventLog {
         }
     }
 
-    /**
-     * Record an event log message.
-     * @param tag The event type tag code
-     * @param value A value to log
-     * @return The number of bytes written
-     */
-    public static int writeEvent(int tag, int value) {
-        if (!Build.IS_DEBUGGABLE) {
-            return 0;
-        }
-
-        return nativeWriteEvent(tag, value);
-    }
+    // We assume that the native methods deal with any concurrency issues.
 
     /**
      * Record an event log message.
@@ -355,13 +343,7 @@ public class EventLog {
      * @return The number of bytes written
      */
     @RavenwoodRedirect
-    public static int writeEvent(int tag, long value) {
-        if (!Build.IS_DEBUGGABLE) {
-            return 0;
-        }
-
-        return nativeWriteEvent(tag, value);
-    }
+    public static native int writeEvent(int tag, int value);
 
     /**
      * Record an event log message.
@@ -370,13 +352,7 @@ public class EventLog {
      * @return The number of bytes written
      */
     @RavenwoodRedirect
-    public static native int writeEvent(int tag, long value) {
-        if (!Build.IS_DEBUGGABLE) {
-            return 0;
-        }
-
-        return nativeWriteEvent(tag, value);
-    }
+    public static native int writeEvent(int tag, long value);
 
     /**
      * Record an event log message.
@@ -385,13 +361,7 @@ public class EventLog {
      * @return The number of bytes written
      */
     @RavenwoodRedirect
-    public static int writeEvent(int tag, float value) {
-        if (!Build.IS_DEBUGGABLE) {
-            return 0;
-        }
-
-        return nativeWriteEvent(tag, value);
-    }
+    public static native int writeEvent(int tag, float value);
 
     /**
      * Record an event log message.
@@ -400,13 +370,7 @@ public class EventLog {
      * @return The number of bytes written
      */
     @RavenwoodRedirect
-    public static int writeEvent(int tag, String str) {
-        if (!Build.IS_DEBUGGABLE) {
-            return 0;
-        }
-
-        return nativeWriteEvent(tag, str);
-    }
+    public static native int writeEvent(int tag, String str);
 
     /**
      * Record an event log message.
@@ -415,13 +379,7 @@ public class EventLog {
      * @return The number of bytes written
      */
     @RavenwoodRedirect
-    public static int writeEvent(int tag, Object... list) {
-        if (!Build.IS_DEBUGGABLE) {
-            return 0;
-        }
-
-        return nativeWriteEvent(tag, list);
-    }
+    public static native int writeEvent(int tag, Object... list);
 
     /**
      * Read events from the log, filtered by type.
@@ -430,14 +388,8 @@ public class EventLog {
      * @throws IOException if something goes wrong reading events
      */
     @RavenwoodThrow
-    public static void readEvents(int[] tags, Collection<Event> output)
-            throws IOException {
-        if (!Build.IS_DEBUGGABLE) {
-            return;
-        }
-
-        nativeReadEvents(tags, output);
-    }
+    public static native void readEvents(int[] tags, Collection<Event> output)
+            throws IOException;
 
     /**
      * Read events from the log, filtered by type, blocking until logs are about to be overwritten.
@@ -449,15 +401,9 @@ public class EventLog {
      */
     @SystemApi
     @RavenwoodThrow
-    public static void readEventsOnWrapping(int[] tags, long timestamp,
+    public static native void readEventsOnWrapping(int[] tags, long timestamp,
             Collection<Event> output)
-            throws IOException {
-        if (!Build.IS_DEBUGGABLE) {
-            return;
-        }
-
-        nativeReadEventsOnWrapping(tags, timestamp, output);
-    }
+            throws IOException;
 
     /**
      * Get the name associated with an event type tag code.
