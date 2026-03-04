@@ -392,9 +392,6 @@ class AppCompatAspectRatioPolicy {
             top = containingBounds.top;
         }
         outBounds.set(left, top, right, bottom);
-        if (mActivityRecord.shouldForceLongScreen()) {
-            outBounds.set(mActivityRecord.getRequestedOverrideBounds());
-        }
         return true;
     }
 
